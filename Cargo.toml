@@ -1,11 +1,11 @@
 [package]
 name = "solana-vanity"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "A fast CLI and library for generating Solana vanity addresses."
-authors = ["Your Name <you@example.com>"]
+authors = ["Kenny"]
 license = "MIT"
-repository = "https://github.com/yourusername/solana-vanity-address-rs"
+repository = "https://github.com/devgreek/solana-vanity-address-rs"
 
 [dependencies]
 solana-sdk = "2.1.1" # Use a recent version
