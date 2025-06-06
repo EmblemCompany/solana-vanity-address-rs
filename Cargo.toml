@@ -13,3 +13,7 @@ bs58 = "0.4"
 rayon = "1.9" # For multithreading
 clap = { version = "4.0", features = ["derive"] } # For CLI arguments
 num_cpus = "1.17.0"
+base64 = "0.22.1"
+
+[dev-dependencies]
+num_cpus = "1.17.0"
