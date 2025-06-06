@@ -1,5 +1,5 @@
 use clap::Parser;
-use solana_vanity::{find_vanity_address};
+use solana_vanity::{find_vanity_address, find_vanity_address_with_suffix};
 use std::{ sync::atomic::{ AtomicBool, Ordering }, time::Instant };
 use rayon::prelude::*;
 use solana_sdk::signer::Signer;
@@ -10,6 +10,7 @@ struct Args {
     /// The desired prefix for the vanity address (case-sensitive)
     #[arg(short, long)]
     prefix: String,
+    suffix:: String,
 
     /// Number of threads to use (defaults to available CPU cores)
     #[arg(short, long, default_value_t = num_cpus::get())]
@@ -24,7 +25,7 @@ fn main() {
     println!("Searching for Solana vanity address starting with: \"{}\"", prefix);
     println!("Using {} threads...", num_threads);
 
-    let result = find_vanity_address(&prefix, num_threads);
+    let result = find_vanity_address_with_suffix(&suffix, num_threads);
     let pubkey_str = result.keypair.pubkey().to_string();
     println!("\n🎉 Found a vanity address!");
     println!("Address: {}", pubkey_str);

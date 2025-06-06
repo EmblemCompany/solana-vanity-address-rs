@@ -48,3 +48,41 @@ pub fn find_vanity_address(prefix: &str, num_threads: usize) -> VanityResult {
         attempts: attempts.load(Ordering::Relaxed),
     }
 }
+
+/// Searches for a Solana keypair whose public key ends with the given suffix.
+/// Uses the specified number of threads.
+pub fn find_vanity_address_with_suffix(suffix: &str, num_threads: usize) -> VanityResult {
+    use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+    use std::sync::{Arc, Mutex};
+    use std::time::Instant;
+
+    let found = AtomicBool::new(false);
+    let attempts = AtomicU64::new(0);
+    let start_time = Instant::now();
+    let result = Arc::new(Mutex::new(None::<Keypair>));
+
+    rayon::ThreadPoolBuilder::new().num_threads(num_threads).build_global().ok();
+
+    while !found.load(Ordering::SeqCst) {
+        let result_clone = Arc::clone(&result);
+        (0..100_000).into_par_iter().for_each(|_| {
+            if found.load(Ordering::SeqCst) {
+                return;
+            }
+            let keypair = Keypair::new();
+            let pubkey_str = keypair.pubkey().to_string();
+            attempts.fetch_add(1, Ordering::Relaxed);
+            if pubkey_str.ends_with(suffix) {
+                found.store(true, Ordering::SeqCst);
+                let mut result_guard = result_clone.lock().unwrap();
+                *result_guard = Some(keypair);
+            }
+        });
+    }
+
+    VanityResult {
+        keypair: result.lock().unwrap().take().expect("Keypair should be found"),
+        elapsed: start_time.elapsed(),
+        attempts: attempts.load(Ordering::Relaxed),
+    }
+}
