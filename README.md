@@ -52,5 +52,24 @@ This will search for a Solana address starting with `Sol` using all available CP
 ## Output
 - The program prints the matching address, the private key (in Base58 and bytes), and the time taken.
 
+## Library Usage
+
+You can use this crate as a library in your own Rust project:
+
+Add to your `Cargo.toml`:
+
+```toml
+solana-vanity = "0.1.0"
+```
+
+Example usage:
+
+```rust
+use solana_vanity::find_vanity_address;
+
+let result = find_vanity_address("Sol", 8);
+println!("Address: {}", result.keypair.pubkey());
+```
+
 ## License
 MIT
