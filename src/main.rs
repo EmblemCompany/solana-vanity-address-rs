@@ -2,6 +2,7 @@ use clap::Parser;
 use solana_vanity::{find_vanity_address};
 use std::{ sync::atomic::{ AtomicBool, Ordering }, time::Instant };
 use rayon::prelude::*;
+use solana_sdk::signer::Signer;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]

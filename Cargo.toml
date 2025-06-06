@@ -8,7 +8,7 @@ license = "MIT"
 repository = "https://github.com/yourusername/solana-vanity-address-rs"
 
 [dependencies]
-solana-sdk = "1.18" # Use a recent version
+solana-sdk = "2.1.1" # Use a recent version
 bs58 = "0.4"
 rayon = "1.9" # For multithreading
 clap = { version = "4.0", features = ["derive"] } # For CLI arguments
