@@ -59,7 +59,7 @@ You can use this crate as a library in your own Rust project:
 Add to your `Cargo.toml`:
 
 ```toml
-solana-vanity = "0.1.0"
+solana-vanity = "0.1.1"
 ```
 
 Example usage:
@@ -70,6 +70,3 @@ use solana_vanity::find_vanity_address;
 let result = find_vanity_address("Sol", 8);
 println!("Address: {}", result.keypair.pubkey());
 ```
-
-## License
-MIT
