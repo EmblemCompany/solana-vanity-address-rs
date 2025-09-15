@@ -1,11 +1,12 @@
 # Solana Vanity Address Generator
 
-This project is a fast CLI tool to generate Solana wallet addresses (public keys) with a custom prefix (vanity address), leveraging multithreading for speed.
+This project is a fast CLI tool to generate Solana wallet addresses (public keys) with a custom suffix (vanity address), leveraging multithreading for speed.
 
 ## Features
-- Generates Solana addresses with a user-specified prefix
+- Generates Solana addresses with a user-specified suffix (addresses ending with your pattern)
 - Multithreaded for high performance (using all CPU cores by default)
 - Outputs both the public address and private key
+- REST API for generating addresses on-demand
 
 ## Installation
 
@@ -28,26 +29,26 @@ This project is a fast CLI tool to generate Solana wallet addresses (public keys
 
 ## Usage
 
-Run the program with your desired prefix:
+Run the program with your desired suffix:
 
 ```bash
-cargo run --release -- --prefix <PREFIX>
+cargo run --release -- --suffix <SUFFIX>
 ```
 
-- Replace `<PREFIX>` with the string you want your Solana address to start with (case-sensitive).
+- Replace `<SUFFIX>` with the string you want your Solana address to end with (case-sensitive).
 - Optionally, specify the number of threads (defaults to all CPU cores):
 
 ```bash
-cargo run --release -- --prefix <PREFIX> --threads 8
+cargo run --release -- --suffix <SUFFIX> --threads 8
 ```
 
 ### Example
 
 ```bash
-cargo run --release -- --prefix Sol
+cargo run --release -- --suffix bonk
 ```
 
-This will search for a Solana address starting with `Sol` using all available CPU cores.
+This will search for a Solana address ending with `bonk` using all available CPU cores.
 
 ## Output
 - The program prints the matching address, the private key (in Base58 and bytes), and the time taken.
@@ -89,8 +90,8 @@ solana-vanity = "0.1.1"
 Example usage:
 
 ```rust
-use solana_vanity::find_vanity_address;
+use solana_vanity::find_vanity_address_with_suffix;
 
-let result = find_vanity_address("Sol", 8);
+let result = find_vanity_address_with_suffix("bonk", 8);
 println!("Address: {}", result.keypair.pubkey());
 ```
