@@ -49,7 +49,7 @@ pub async fn generate_address(params: web::Query<GenerateParams>) -> Result<Http
     }
 
     let search_type = params.search_type.as_deref().unwrap_or("suffix");
-    let threads = params.threads.unwrap_or(64).min(64); // Default to 64 threads
+    let threads = params.threads.unwrap_or(64).min(256); // Allow up to 256 threads
 
     let result = match search_type {
         "prefix" => find_vanity_address(&params.pattern, threads),
