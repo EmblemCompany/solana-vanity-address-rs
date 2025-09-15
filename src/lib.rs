@@ -86,3 +86,75 @@ pub fn find_vanity_address_with_suffix(suffix: &str, num_threads: usize) -> Vani
         attempts: attempts.load(Ordering::Relaxed),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::HashSet;
+
+    #[test]
+    fn test_keypair_entropy() {
+        // Generate multiple keypairs and ensure they are all unique
+        let mut keypairs = HashSet::new();
+        let mut pubkeys = HashSet::new();
+
+        for _ in 0..1000 {
+            let keypair = Keypair::new();
+            let pubkey = keypair.pubkey().to_string();
+            let secret = keypair.to_bytes();
+
+            // Check that we have not seen this keypair before
+            assert!(keypairs.insert(secret.to_vec()), "Duplicate keypair generated!");
+            assert!(pubkeys.insert(pubkey), "Duplicate public key generated!");
+        }
+
+        println!("✓ Generated 1000 unique keypairs - entropy is working correctly");
+    }
+
+    #[test]
+    fn test_keypair_randomness_distribution() {
+        // Check that the first byte of public keys has good distribution
+        let mut byte_counts = vec![0u32; 256];
+        let iterations = 10000;
+
+        for _ in 0..iterations {
+            let keypair = Keypair::new();
+            let pubkey_bytes = keypair.pubkey().to_bytes();
+            byte_counts[pubkey_bytes[0] as usize] += 1;
+        }
+
+        // Calculate chi-square statistic
+        let expected = iterations as f64 / 256.0;
+        let chi_square: f64 = byte_counts.iter()
+            .map(|&count| {
+                let diff = count as f64 - expected;
+                (diff * diff) / expected
+            })
+            .sum();
+
+        // For 255 degrees of freedom, chi-square should be around 255
+        // We will accept values between 200 and 320 (p-value roughly 0.01 to 0.99)
+        assert!(chi_square > 200.0 && chi_square < 320.0,
+                "Chi-square value {} indicates poor randomness", chi_square);
+
+        println!("✓ Randomness distribution test passed (chi-square: {:.2})", chi_square);
+    }
+
+    #[test]
+    fn test_concurrent_keypair_generation() {
+        // Test that concurrent generation produces unique keys
+        use std::sync::{Arc, Mutex};
+        use rayon::prelude::*;
+
+        let keypairs = Arc::new(Mutex::new(HashSet::new()));
+
+        (0..1000).into_par_iter().for_each(|_| {
+            let keypair = Keypair::new();
+            let mut set = keypairs.lock().unwrap();
+            assert!(set.insert(keypair.to_bytes().to_vec()),
+                    "Duplicate keypair in concurrent generation!");
+        });
+
+        println!("✓ Concurrent generation produces unique keypairs");
+    }
+}
