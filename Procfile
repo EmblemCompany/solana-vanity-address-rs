@@ -1,1 +1,1 @@
-web: ./target/release/solana-vanity-api
+web: ./start.sh
