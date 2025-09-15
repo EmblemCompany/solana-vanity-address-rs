@@ -8,9 +8,16 @@ echo ""
 echo "Looking for binary in target/release:"
 if [ -d "target/release" ]; then
     ls -la target/release/
+    # Check for solana-vanity-api first (preferred)
     if [ -f "target/release/solana-vanity-api" ]; then
-        echo "Found binary at target/release/solana-vanity-api"
+        echo "Found API binary at target/release/solana-vanity-api"
         exec ./target/release/solana-vanity-api
+    # Fall back to solana-vanity if API binary not found
+    elif [ -f "target/release/solana-vanity" ]; then
+        echo "WARNING: Found CLI binary but not API binary!"
+        echo "The build didn't create solana-vanity-api"
+        echo "Buildpack may not be using --features api flag"
+        exit 1
     fi
 fi
 
