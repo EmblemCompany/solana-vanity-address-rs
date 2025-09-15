@@ -1,6 +1,9 @@
 //! Library for generating Solana vanity addresses.
 
 use solana_sdk::{signature::{Keypair, Signer}, pubkey::Pubkey};
+
+#[cfg(feature = "api")]
+pub mod api;
 use rayon::prelude::*;
 
 /// Result of a successful vanity address search.
