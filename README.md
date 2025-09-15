@@ -52,6 +52,30 @@ This will search for a Solana address starting with `Sol` using all available CP
 ## Output
 - The program prints the matching address, the private key (in Base58 and bytes), and the time taken.
 
+## Batch Generation Script
+
+The repository includes a script `generate_bonk_addresses.sh` to generate multiple vanity addresses:
+
+```bash
+# Make the script executable (first time only)
+chmod +x generate_bonk_addresses.sh
+
+# Generate 10 addresses ending with 'bonk' using 64 threads (default)
+./generate_bonk_addresses.sh
+
+# Generate 5 addresses using 64 threads
+./generate_bonk_addresses.sh 5
+
+# Generate 20 addresses using 128 threads
+./generate_bonk_addresses.sh 20 128
+```
+
+The script will:
+- Generate the specified number of addresses ending with 'bonk'
+- Save all addresses and private keys to `bonk_addresses.txt`
+- Show colored progress output in the terminal
+- Append to the output file if run multiple times
+
 ## Library Usage
 
 You can use this crate as a library in your own Rust project:
