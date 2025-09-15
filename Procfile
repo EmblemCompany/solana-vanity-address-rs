@@ -1,1 +1,1 @@
-web: ./solana-vanity-api
+web: bash start.sh
