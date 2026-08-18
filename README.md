@@ -7,6 +7,8 @@ This project is a fast CLI tool to generate Solana wallet addresses (public keys
 - Multithreaded for high performance (using all CPU cores by default)
 - Outputs both the public address and private key
 - REST API for generating addresses on-demand
+- Optional, additive Pons V2 / Robinhood Chain CREATE2 miner that searches
+  deployment salts locally without RPC calls, signing, or private keys
 
 ## Installation
 
@@ -95,3 +97,17 @@ use solana_vanity::find_vanity_address_with_suffix;
 let result = find_vanity_address_with_suffix("bonk", 8);
 println!("Address: {}", result.keypair.pubkey());
 ```
+
+## Robinhood Chain Pons V2 miner
+
+Build the API binary with the same feature flag:
+
+```bash
+cargo build --release --features api --bin solana-vanity-api
+EVM_VANITY_API_KEY=replace-me PORT=8080 ./target/release/solana-vanity-api
+```
+
+The additive `POST /v1/evm/create2/mine` endpoint mines deterministic Pons V2
+token or curve addresses from a pre-resolved launch snapshot. It never handles
+wallet keys or contacts an RPC while mining. See [API.md](API.md#robinhood-chain--pons-v2-offline-create2-mining)
+for the request contract and the required final-verification step.
