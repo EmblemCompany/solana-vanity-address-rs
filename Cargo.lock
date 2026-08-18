@@ -1324,6 +1324,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f154ce46856750ed433c8649605bf7ed2de3bc35fd9d2a9f30cddd873c80cb08"
 
 [[package]]
+name = "hex"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+
+[[package]]
 name = "hmac"
 version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3820,10 +3826,13 @@ dependencies = [
  "bs58 0.4.0",
  "clap",
  "env_logger 0.10.2",
+ "hex",
  "num_cpus",
+ "rand 0.8.5",
  "rayon",
  "serde",
  "serde_json",
+ "sha3",
  "solana-sdk",
 ]
 

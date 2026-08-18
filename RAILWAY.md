@@ -36,9 +36,14 @@ Railway will automatically:
 
 ## Environment Variables
 
-No environment variables required. The app will use:
-- PORT (provided by Railway)
-- Default 256 threads for generation
+- `PORT` — supplied by Railway.
+- `EVM_VANITY_API_KEY` — strongly recommended when enabling the Pons V2
+  CREATE2 endpoint. Requests to `POST /v1/evm/create2/mine` must then include
+  `Authorization: Bearer <value>`.
+
+The existing Solana `GET /generate` endpoint does not require the EVM key and
+keeps its existing contract. The EVM miner uses the available CPU-core count by
+default and accepts at most 256 requested threads.
 
 ## Performance
 
@@ -55,6 +60,11 @@ Once deployed, your API will be available at:
 
 - `GET /health` - Health check
 - `GET /generate?pattern=<pattern>&type=<suffix|prefix>&threads=<1-256>` - Generate vanity address
+- `POST /v1/evm/create2/mine` - Offline Pons V2 / Robinhood Chain CREATE2 miner
+
+See [API.md](API.md#robinhood-chain--pons-v2-offline-create2-mining) for the
+EVM request schema. Do not call that endpoint directly from a browser; proxy it
+through your first-party backend so the service key remains private.
 
 ## Example Usage
 
